@@ -1,9 +1,10 @@
-package task
+package service_test
 
 import (
 	"errors"
 	"testing"
 	m "todo_list_api/internal/task/mocks"
+	"todo_list_api/internal/task/service"
 	"todo_list_api/pkg/models"
 	"todo_list_api/pkg/utils"
 
@@ -12,7 +13,7 @@ import (
 
 func TestCreateTask(t *testing.T) {
 	mockRepo := new(m.MockRepository)
-	svc := NewTaskService(mockRepo)
+	svc := service.NewTaskService(mockRepo)
 
 	t.Run("should return error if title is empty", func(t *testing.T) {
 		task := &models.Task{Status: "Pending"}
@@ -53,7 +54,7 @@ func TestCreateTask(t *testing.T) {
 
 func TestDeleteTask(t *testing.T) {
 	mockRepo := new(m.MockRepository)
-	svc := NewTaskService(mockRepo)
+	svc := service.NewTaskService(mockRepo)
 
 	taskID := int64(1)
 
@@ -81,7 +82,7 @@ func TestDeleteTask(t *testing.T) {
 
 func TestGetTask(t *testing.T) {
 	mockRepo := new(m.MockRepository)
-	svc := NewTaskService(mockRepo)
+	svc := service.NewTaskService(mockRepo)
 
 	taskID := int64(1)
 
@@ -126,7 +127,7 @@ func TestGetTask(t *testing.T) {
 
 func TestListTasks(t *testing.T) {
 	mockRepo := new(m.MockRepository)
-	svc := NewTaskService(mockRepo)
+	svc := service.NewTaskService(mockRepo)
 
 	t.Run("should return a task list", func(t *testing.T) {
 		mockTask := []*models.Task{
@@ -156,7 +157,7 @@ func TestListTasks(t *testing.T) {
 
 func TestUpdateTask(t *testing.T) {
 	mockRepo := new(m.MockRepository)
-	svc := NewTaskService(mockRepo)
+	svc := service.NewTaskService(mockRepo)
 
 	t.Run("should return error if title is empty", func(t *testing.T) {
 		task := &models.Task{Status: "Pending"}

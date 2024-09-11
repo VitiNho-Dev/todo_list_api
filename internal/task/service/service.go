@@ -1,4 +1,4 @@
-package task
+package service
 
 import (
 	r "todo_list_api/internal/task/repository"
@@ -18,7 +18,7 @@ type TaskService struct {
 	repo r.Repository
 }
 
-func NewTaskService(repo r.Repository) *TaskService {
+func NewTaskService(repo r.Repository) Service {
 	return &TaskService{repo: repo}
 }
 

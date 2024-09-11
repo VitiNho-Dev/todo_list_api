@@ -1,4 +1,4 @@
-package task
+package repository
 
 import (
 	"database/sql"
@@ -19,7 +19,7 @@ type TaskRepository struct {
 	db *sql.DB
 }
 
-func NewTaskRepository(db *sql.DB) *TaskRepository {
+func NewTaskRepository(db *sql.DB) Repository {
 	return &TaskRepository{db: db}
 }
 
@@ -81,13 +81,13 @@ func (r *TaskRepository) DeleteTask(id int64) error {
 	return nil
 }
 
-func (r *TaskRepository) ListTasks() ([]models.Task, error) {
+func (r *TaskRepository) ListTasks() ([]*models.Task, error) {
 	const query = "SELECT id, title, description, status, created_at, updated_at FROM tasks"
 	rows, err := r.db.Query(query)
 	if err != nil {
 		return nil, err
 	}
-	var tasks []models.Task
+	var tasks []*models.Task
 	for rows.Next() {
 		var task models.Task
 		err := rows.Scan(
@@ -101,7 +101,7 @@ func (r *TaskRepository) ListTasks() ([]models.Task, error) {
 		if err != nil {
 			return nil, err
 		}
-		tasks = append(tasks, task)
+		tasks = append(tasks, &task)
 	}
 	return tasks, nil
 }

@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: postegres
+    environment:
+      POSTGRES_USER: victor
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    container_name: todo_list_api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_USER: victor
+      DB_PASSWORD: 123456
+      DB_NAME: postgres
+      DB_PORT: 5432
+
+volumes:
+  postgres_data:

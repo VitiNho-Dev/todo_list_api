@@ -1,9 +1,10 @@
-package task
+package repository_test
 
 import (
 	"errors"
 	"testing"
 	"time"
+	"todo_list_api/internal/task/repository"
 	"todo_list_api/pkg/models"
 
 	"github.com/DATA-DOG/go-sqlmock"
@@ -15,7 +16,7 @@ func TestCreateTask(t *testing.T) {
 	assert.NoError(t, err)
 	defer db.Close()
 
-	repo := NewTaskRepository(db)
+	repo := repository.NewTaskRepository(db)
 
 	t.Run("must validate the query and if query is valid, create a new task in the tasks table", func(t *testing.T) {
 		task := &models.Task{
@@ -72,7 +73,7 @@ func TestGetTask(t *testing.T) {
 	assert.NoError(t, err)
 	defer db.Close()
 
-	repo := NewTaskRepository(db)
+	repo := repository.NewTaskRepository(db)
 
 	t.Run("should validate the query and if the query is valid, return a task by id", func(t *testing.T) {
 		columns := []string{"id", "title", "description", "status", "created_at", "updated_at"}
@@ -127,7 +128,7 @@ func TestUpdateTask(t *testing.T) {
 	assert.NoError(t, err)
 	defer db.Close()
 
-	repo := NewTaskRepository(db)
+	repo := repository.NewTaskRepository(db)
 
 	t.Run("must be a valid query and if the query is valid, return an updated task", func(t *testing.T) {
 		taskUpdated := &models.Task{
@@ -190,7 +191,7 @@ func TestDeleteTask(t *testing.T) {
 	assert.NoError(t, err)
 	defer db.Close()
 
-	repo := NewTaskRepository(db)
+	repo := repository.NewTaskRepository(db)
 
 	t.Run("must validate the query and if the query is valid, delete the task from the tasks table", func(t *testing.T) {
 		const id = 1
@@ -226,7 +227,7 @@ func TestListTasks(t *testing.T) {
 	assert.NoError(t, err)
 	defer db.Close()
 
-	repo := NewTaskRepository(db)
+	repo := repository.NewTaskRepository(db)
 
 	t.Run("must validate the query and if the query is valid, return a list of tasks from the tasks table", func(t *testing.T) {
 		columns := []string{"id", "title", "description", "status", "created_at", "updated_at"}

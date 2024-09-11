@@ -82,3 +82,33 @@ func (h *Handler) GetTask(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, utils.ErrFailedEncode.Error(), http.StatusInternalServerError)
 	}
 }
+
+func (h *Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
+	tasks, err := h.service.ListTasks()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+
+	if err := json.NewEncoder(w).Encode(tasks); err != nil {
+		http.Error(w, utils.ErrFailedEncode.Error(), http.StatusInternalServerError)
+	}
+}
+
+func (h *Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
+	var task models.Task
+	if err := json.NewDecoder(r.Body).Decode(&task); err != nil {
+		http.Error(w, utils.ErrInvalidPayload.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if err := h.service.UpdateTask(&task); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}

@@ -30,10 +30,12 @@ func (m *MockService) GetTask(id int64) (*models.Task, error) {
 
 // ListTasks implements task.Service.
 func (m *MockService) ListTasks() ([]*models.Task, error) {
-	panic("unimplemented")
+	args := m.Called()
+	return args.Get(0).([]*models.Task), args.Error(1)
 }
 
 // UpdateTask implements task.Service.
 func (m *MockService) UpdateTask(task *models.Task) error {
-	panic("unimplemented")
+	args := m.Called(task)
+	return args.Error(0)
 }
