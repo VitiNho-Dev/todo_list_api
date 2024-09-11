@@ -7,8 +7,6 @@ import (
 	"todo_list_api/internal/task/handler"
 	"todo_list_api/internal/task/repository"
 	"todo_list_api/internal/task/service"
-
-	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -17,18 +15,18 @@ func main() {
 		log.Fatalf("could not connect to the database: %v", err)
 	}
 
+	mux := http.NewServeMux()
+
 	taskRepo := repository.NewTaskRepository(db)
 	taskService := service.NewTaskService(taskRepo)
 	taskHandler := handler.NewHandler(taskService)
 
-	r := mux.NewRouter()
-
-	r.HandleFunc("/tasks", taskHandler.CreateTask).Methods("POST")
-	r.HandleFunc("/tasks/{id}", taskHandler.GetTask).Methods("GET")
-	r.HandleFunc("/tasks/{id}", taskHandler.UpdateTask).Methods("PUT")
-	r.HandleFunc("/tasks/{id}", taskHandler.DeleteTask).Methods("DELETE")
-	r.HandleFunc("/tasks", taskHandler.ListTasks).Methods("GET")
+	mux.HandleFunc("POST /tasks", taskHandler.CreateTask)
+	mux.HandleFunc("GET /tasks/{id}", taskHandler.GetTask)
+	mux.HandleFunc("PUT /tasks/{id}", taskHandler.UpdateTask)
+	mux.HandleFunc("DELETE /tasks/{id}", taskHandler.DeleteTask)
+	mux.HandleFunc("GET /tasks", taskHandler.ListTasks)
 
 	log.Println("Server running on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	log.Fatal(http.ListenAndServe(":8080", mux))
 }

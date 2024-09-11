@@ -249,8 +249,33 @@ func TestUpdateTask(t *testing.T) {
 	mockService := new(m.MockService)
 	handler := handler.NewHandler(mockService)
 
+	t.Run("should validate the ID and if the ID is empty return 400", func(t *testing.T) {
+		req, _ := http.NewRequest("PUT", "/tasks/", nil)
+
+		rr := httptest.NewRecorder()
+		handler.UpdateTask(rr, req)
+
+		assert.Equal(t, http.StatusBadRequest, rr.Code)
+		assert.Equal(t, "ID cannot be empty\n", rr.Body.String())
+	})
+
+	t.Run("should validate the ID and if the ID is invalid return 400", func(t *testing.T) {
+		req, _ := http.NewRequest("PUT", "/tasks/invalid", nil)
+		rr := httptest.NewRecorder()
+
+		req.SetPathValue("id", "invalid")
+
+		handler.UpdateTask(rr, req)
+
+		assert.Equal(t, http.StatusBadRequest, rr.Code)
+		assert.Equal(t, "the id is invalid\n", rr.Body.String())
+	})
+
 	t.Run("should make the request and return a bad request error when updating the task", func(t *testing.T) {
-		req, _ := http.NewRequest("PUT", "/tasks/1", bytes.NewBuffer([]byte("invalid json")))
+		taskID := 1
+
+		req, _ := http.NewRequest("PUT", "/tasks/"+strconv.Itoa(taskID), bytes.NewBuffer([]byte("invalid json")))
+		req.SetPathValue("id", strconv.Itoa(taskID))
 		rr := httptest.NewRecorder()
 
 		handler.UpdateTask(rr, req)
@@ -262,8 +287,10 @@ func TestUpdateTask(t *testing.T) {
 	t.Run("should return 500 if service fails", func(t *testing.T) {
 		task := &models.Task{}
 		payload, _ := json.Marshal(task)
+		taskID := 1
 
-		req, _ := http.NewRequest("PUT", "/tasks/1", bytes.NewBuffer(payload))
+		req, _ := http.NewRequest("PUT", "/tasks/"+strconv.Itoa(taskID), bytes.NewBuffer(payload))
+		req.SetPathValue("id", strconv.Itoa(taskID))
 		rr := httptest.NewRecorder()
 
 		mockService.On("UpdateTask", mock.Anything).Return(errors.New("service error")).Once()
@@ -278,8 +305,10 @@ func TestUpdateTask(t *testing.T) {
 	t.Run("should return 200 if update task is successful", func(t *testing.T) {
 		task := models.Task{ID: 1, Title: "New Task", Status: "Pending"}
 		payload, _ := json.Marshal(task)
+		taskID := 1
 
-		req, _ := http.NewRequest("PUT", "/tasks/1", bytes.NewBuffer(payload))
+		req, _ := http.NewRequest("PUT", "/tasks/"+strconv.Itoa(taskID), bytes.NewBuffer(payload))
+		req.SetPathValue("id", strconv.Itoa(taskID))
 		rr := httptest.NewRecorder()
 
 		mockService.On("UpdateTask", &task).Return(nil).Once()

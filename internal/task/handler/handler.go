@@ -99,7 +99,20 @@ func (h *Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
+	idStr := r.PathValue("id")
+	if idStr == "" {
+		http.Error(w, utils.ErrEmptyID.Error(), http.StatusBadRequest)
+		return
+	}
+
+	ID, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, utils.ErrInvalidId.Error(), http.StatusBadRequest)
+		return
+	}
+
 	var task models.Task
+	task.ID = int64(ID)
 	if err := json.NewDecoder(r.Body).Decode(&task); err != nil {
 		http.Error(w, utils.ErrInvalidPayload.Error(), http.StatusBadRequest)
 		return
