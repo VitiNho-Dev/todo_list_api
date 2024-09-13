@@ -29,7 +29,15 @@ func (h *Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	response := models.Response{
+		Message: "Tarefa criada com sucesso",
+	}
+
 	w.WriteHeader(http.StatusCreated)
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(&response); err != nil {
+		http.Error(w, utils.ErrFailedEncode.Error(), http.StatusInternalServerError)
+	}
 }
 
 func (h *Handler) DeleteTask(w http.ResponseWriter, r *http.Request) {
@@ -50,7 +58,15 @@ func (h *Handler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	response := models.Response{
+		Message: "Tarefa excluida com sucesso",
+	}
+
 	w.WriteHeader(http.StatusNoContent)
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(&response); err != nil {
+		http.Error(w, utils.ErrFailedEncode.Error(), http.StatusInternalServerError)
+	}
 }
 
 func (h *Handler) GetTask(w http.ResponseWriter, r *http.Request) {
@@ -123,5 +139,13 @@ func (h *Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	response := models.Response{
+		Message: "Tarefa atualizada com sucesso",
+	}
+
 	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(&response); err != nil {
+		http.Error(w, utils.ErrFailedEncode.Error(), http.StatusInternalServerError)
+	}
 }
