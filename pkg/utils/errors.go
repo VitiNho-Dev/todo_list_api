@@ -12,9 +12,3 @@ var (
 	ErrInvalidPayload = errors.New("invalid request payload")
 	ErrFailedEncode   = errors.New("failed to encode task")
 )
-
-const (
-	StatusPending    = "Pending"
-	StatusInProgress = "In progress"
-	StatusCompleted  = "Completed"
-)
