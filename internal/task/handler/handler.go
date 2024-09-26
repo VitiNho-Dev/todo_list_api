@@ -33,8 +33,8 @@ func (h *Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 		Message: "Tarefa criada com sucesso",
 	}
 
-	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
 	if err := json.NewEncoder(w).Encode(&response); err != nil {
 		http.Error(w, utils.ErrFailedEncode.Error(), http.StatusInternalServerError)
 	}
@@ -62,8 +62,8 @@ func (h *Handler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 		Message: "Tarefa excluida com sucesso",
 	}
 
-	w.WriteHeader(http.StatusNoContent)
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusNoContent)
 	if err := json.NewEncoder(w).Encode(&response); err != nil {
 		http.Error(w, utils.ErrFailedEncode.Error(), http.StatusInternalServerError)
 	}
@@ -92,8 +92,8 @@ func (h *Handler) GetTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(task); err != nil {
 		http.Error(w, utils.ErrFailedEncode.Error(), http.StatusInternalServerError)
 	}
@@ -106,8 +106,8 @@ func (h *Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 
 	if err := json.NewEncoder(w).Encode(tasks); err != nil {
 		http.Error(w, utils.ErrFailedEncode.Error(), http.StatusInternalServerError)
@@ -143,8 +143,8 @@ func (h *Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
 		Message: "Tarefa atualizada com sucesso",
 	}
 
-	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(&response); err != nil {
 		http.Error(w, utils.ErrFailedEncode.Error(), http.StatusInternalServerError)
 	}
